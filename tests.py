@@ -3,7 +3,7 @@ import random
 from time import sleep
 import os
 
-from tweepy import (API, BasicAuthHandler, OAuthHandler, Friendship, Cursor,
+from tweepy import (API, OAuthHandler, Friendship, Cursor,
                     MemoryCache, FileCache)
 
 """Configurations"""
@@ -272,8 +272,10 @@ class TweepyAPITests(unittest.TestCase):
 
     def testaddremovelistmember(self):
         uid = self.api.get_user('twitter').id
-        self.api.add_list_member('test', uid)
-        self.api.remove_list_member('test', uid)
+        self.api.add_list_member(slug='test', owner_screen_name=username,
+                                 user_id=uid)
+        self.api.remove_list_member(slug='test', owner_screen_name=username,
+                                    user_id=uid)
 
     def testlistmembers(self):
         self.api.list_members('applepie', 'stars')

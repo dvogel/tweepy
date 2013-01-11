@@ -16,7 +16,7 @@ class API(object):
 
     def __init__(self, auth_handler=None,
             host='api.twitter.com', search_host='search.twitter.com',
-             cache=None, secure=False, api_root='/1', search_root='',
+             cache=None, secure=True, api_root='/1.1', search_root='',
             retry_count=0, retry_delay=0, retry_errors=None,
             parser=None):
         self.auth = auth_handler
@@ -622,21 +622,23 @@ class API(object):
         allowed_param = ['owner', 'slug']
     )
 
-    def add_list_member(self, slug, *args, **kargs):
+    def add_list_member(self, *args, **kargs):
         return bind_api(
-            path = '/%s/%s/members.json' % (self.auth.get_username(), slug),
+            path = '/lists/members/create.json',
             method = 'POST',
             payload_type = 'list',
-            allowed_param = ['id'],
+            allowed_param = ['list_id', 'slug',
+                             'owner_id', 'owner_screen_name',
+                             'user_id', 'screen_name'],
             require_auth = True
         )(self, *args, **kargs)
 
-    def remove_list_member(self, slug, *args, **kargs):
+    def remove_list_member(self, *args, **kargs):
         return bind_api(
-            path = '/%s/%s/members.json' % (self.auth.get_username(), slug),
-            method = 'DELETE',
+            path = '/lists/members/destroy.json',
+            method = 'POST',
             payload_type = 'list',
-            allowed_param = ['id'],
+            allowed_param = ['list_id', 'slug', 'user_id', 'screen_name'],
             require_auth = True
         )(self, *args, **kargs)
 
